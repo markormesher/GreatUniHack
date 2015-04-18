@@ -2,7 +2,6 @@ package uk.co.markormesher.guh.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -104,6 +103,11 @@ public class Host_SetRoles extends ActionBarActivity {
 		findViewById(R.id.set_roles_done_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// change views
+				findViewById(R.id.set_roles_input).setVisibility(View.GONE);
+				findViewById(R.id.set_roles_loading).setVisibility(View.VISIBLE);
+
+				// get values
 				int villagers = villagerSeekbar.getProgress();
 				int wolves = wolfSeekbar.getProgress();
 				int seers = seerSeekbar.getProgress();
@@ -115,15 +119,11 @@ public class Host_SetRoles extends ActionBarActivity {
 				JsonObjectRequest rolesRequest = new JsonObjectRequest(
 						Request.Method.POST,
 						"http://178.62.96.146/games/" + gameId + "/roles",
-						"{\"villager\":" + villagers + "," +
-								"\"wolf\":" + wolves + "," +
-								"\"seer\":" + seers + "," +
-								"\"healer\":" + healers + "," +
-								"\"hacker\":" + hackers + "}",
+						"{\"villager\":" + villagers + ",\"wolf\":" + wolves + ",\"seer\":" + seers + ",\"healer\":" + healers + ",\"hacker\":" + hackers + "}",
 						new Response.Listener<JSONObject>() {
 							@Override
 							public void onResponse(JSONObject response) {
-								Log.d("MLHORRORS", response.toString());
+
 							}
 						},
 						new Response.ErrorListener() {
