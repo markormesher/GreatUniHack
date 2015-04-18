@@ -1,0 +1,65 @@
+<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingTop="@dimen/activity_vertical_margin"
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:orientation="vertical">
+
+	<LinearLayout
+			android:id="@+id/generating_game_loading"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_centerInParent="true">
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/generating_game"
+				android:gravity="center"/>
+
+		<ProgressBar
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				style="?android:progressBarStyleInverse"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+			android:id="@+id/qr_code_display"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_centerInParent="true"
+			android:visibility="gone">
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/ask_players_to_scan"
+				android:gravity="center"/>
+
+		<TextView
+				android:id="@+id/qr_code_output"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+
+		<TextView
+				android:id="@+id/players_so_far"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+
+		<Button
+				android:id="@+id/start_game_button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/start_game_button"/>
+
+	</LinearLayout>
+
+</RelativeLayout>

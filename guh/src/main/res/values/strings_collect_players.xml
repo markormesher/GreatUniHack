@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="activity_title_collect_players">Hosting: Collect Players</string>
+	<string name="generating_game">Creating New Game…</string>
+	<string name="ask_players_to_scan">Ask players to scan below to join the game.</string>
+	<string name="players_so_far">%d player(s) so far</string>
+	<string name="start_game_button">Start Game</string>
+</resources>

@@ -1,0 +1,11 @@
+package uk.co.markormesher.guh.constants;
+
+public class Keys {
+
+	public final static String GCM_REG_ID = "GCM_REG_ID";
+	public final static String GCM_APP_VERSION = "GCM_APP_VERSION";
+	public final static String GCM_PREFS = "GCM_PREFS";
+
+	public final static String INTENT_PLAYER_JOINED = "uk.co.markormesher.guh.INTENT_PLAYER_JOINED";
+
+}
