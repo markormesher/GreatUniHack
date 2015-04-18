@@ -32,6 +32,7 @@ public class Host_CollectPlayers extends ActionBarActivity {
 		public void onReceive(Context context, Intent intent) {
 			++playerCount;
 			((TextView) findViewById(R.id.players_so_far)).setText(getString(R.string.players_so_far, playerCount));
+			findViewById(R.id.start_game_button).setEnabled(playerCount >= 6);
 		}
 	};
 
