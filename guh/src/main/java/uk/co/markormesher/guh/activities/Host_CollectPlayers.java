@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,7 +47,6 @@ public class Host_CollectPlayers extends ActionBarActivity {
 
 		// get the GCM ID
 		final String gcmId = GCMUtils.getRegistrationID(this);
-		Log.d("WEREWOLF", "GCM ID: " + gcmId);
 
 		// generate a game ID
 		final RequestQueue requestQueue = Volley.newRequestQueue(this);

@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -48,7 +47,6 @@ public class Play_JoinGame extends ActionBarActivity {
 
 		// get the GCM ID
 		final String gcmId = GCMUtils.getRegistrationID(this);
-		Log.d("WEREWOLF", "GCM ID: " + gcmId);
 
 		// button listener
 		findViewById(R.id.join_game_button).setOnClickListener(new View.OnClickListener() {

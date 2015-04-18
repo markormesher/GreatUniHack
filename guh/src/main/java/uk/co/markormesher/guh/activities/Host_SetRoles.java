@@ -2,9 +2,18 @@ package uk.co.markormesher.guh.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONObject;
 import uk.co.markormesher.guh.R;
 
 public class Host_SetRoles extends ActionBarActivity {
@@ -101,7 +110,31 @@ public class Host_SetRoles extends ActionBarActivity {
 				int healers = healerSeekbar.getProgress();
 				int hackers = hackerSeekbar.getProgress();
 
-				// TODO post to server
+				// post to server
+				RequestQueue requestQueue = Volley.newRequestQueue(Host_SetRoles.this);
+				JsonObjectRequest rolesRequest = new JsonObjectRequest(
+						Request.Method.POST,
+						"http://178.62.96.146/games/" + gameId + "/roles",
+						"{\"villager\":" + villagers + "," +
+								"\"wolf\":" + wolves + "," +
+								"\"seer\":" + seers + "," +
+								"\"healer\":" + healers + "," +
+								"\"hacker\":" + hackers + "}",
+						new Response.Listener<JSONObject>() {
+							@Override
+							public void onResponse(JSONObject response) {
+								Log.d("MLHORRORS", response.toString());
+							}
+						},
+						new Response.ErrorListener() {
+							@Override
+							public void onErrorResponse(VolleyError error) {
+								Toast.makeText(Host_SetRoles.this, "Failed to start game.", Toast.LENGTH_LONG).show();
+								Host_SetRoles.this.finish();
+							}
+						}
+				);
+				requestQueue.add(rolesRequest);
 			}
 		});
 	}
