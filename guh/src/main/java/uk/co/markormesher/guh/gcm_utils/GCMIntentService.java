@@ -70,6 +70,13 @@ public class GCMIntentService extends IntentService {
 						Intent i = new Intent(Keys.INTENT_NIGHTTIME);
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
+
+					// buzz
+					if (action.equals("buzz")) {
+						Intent i = new Intent(Keys.INTENT_BUZZ);
+						i.putExtra("role", extras.getString("role"));
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
 				}
 			}
 		}

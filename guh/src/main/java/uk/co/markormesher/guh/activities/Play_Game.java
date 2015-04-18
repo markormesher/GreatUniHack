@@ -99,6 +99,18 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		}
 	};
 
+	BroadcastReceiver buzz = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent.getExtras().getString("role").equals(role)) {
+				// buzz
+				Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+				if (vibrator != null) vibrator.vibrate(1500);
+			}
+
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -185,6 +197,9 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 
 		IntentFilter iff5 = new IntentFilter(Keys.INTENT_META);
 		LocalBroadcastManager.getInstance(this).registerReceiver(meta, iff5);
+
+		IntentFilter iff6 = new IntentFilter(Keys.INTENT_BUZZ);
+		LocalBroadcastManager.getInstance(this).registerReceiver(meta, iff6);
 	}
 
 	@Override
@@ -195,6 +210,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(daytime);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(nighttime);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(meta);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(buzz);
 	}
 
 	private void checkAllLoaded() {

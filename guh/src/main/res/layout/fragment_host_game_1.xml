@@ -26,7 +26,42 @@
 				android:id="@+id/global_nighttime_button"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="@string/global_nighttime_button_label"/>
+				android:text="@string/global_nighttime_button_label"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<Button
+				android:id="@+id/global_buzz_villagers_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/global_buzz_villagers_button_label"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<Button
+				android:id="@+id/global_buzz_wolves_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/global_buzz_wolves_button_label"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<Button
+				android:id="@+id/global_buzz_seers_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/global_buzz_seers_button_label"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<Button
+				android:id="@+id/global_buzz_healers_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/global_buzz_healers_button_label"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<Button
+				android:id="@+id/global_buzz_hackers_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/global_buzz_hackers_button_label"/>
 
 	</LinearLayout>
 

@@ -2,4 +2,9 @@
 <resources>
 	<string name="global_daytime_button_label">Daytime</string>
 	<string name="global_nighttime_button_label">Nighttime</string>
+	<string name="global_buzz_villagers_button_label">Buzz Villagers</string>
+	<string name="global_buzz_wolves_button_label">Buzz Wolves</string>
+	<string name="global_buzz_seers_button_label">Buzz Seers</string>
+	<string name="global_buzz_healers_button_label">Buzz Healers</string>
+	<string name="global_buzz_hackers_button_label">Buzz Hackers</string>
 </resources>

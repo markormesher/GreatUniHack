@@ -150,6 +150,36 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 					((Host_Game) getActivity()).startNighttime();
 				}
 			});
+			view.findViewById(R.id.global_buzz_villagers_button).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((Host_Game) getActivity()).buzz("villager");
+				}
+			});
+			view.findViewById(R.id.global_buzz_wolves_button).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((Host_Game) getActivity()).buzz("wolf");
+				}
+			});
+			view.findViewById(R.id.global_buzz_seers_button).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((Host_Game) getActivity()).buzz("seer");
+				}
+			});
+			view.findViewById(R.id.global_buzz_healers_button).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((Host_Game) getActivity()).buzz("healer");
+				}
+			});
+			view.findViewById(R.id.global_buzz_hackers_button).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((Host_Game) getActivity()).buzz("hacker");
+				}
+			});
 			return view;
 		}
 	}
@@ -160,7 +190,7 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 	}
 
 	private void startDaytime() {
-		StringRequest startRequest = new StringRequest(
+		StringRequest request = new StringRequest(
 				Request.Method.GET,
 				"http://178.62.96.146/games/" + gameId + "/daytime",
 				new Response.Listener<String>() {
@@ -176,11 +206,11 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 					}
 				}
 		);
-		VolleySingleton.getInstance().getRequestQueue().add(startRequest);
+		VolleySingleton.getInstance().getRequestQueue().add(request);
 	}
 
 	private void startNighttime() {
-		StringRequest startRequest = new StringRequest(
+		StringRequest request = new StringRequest(
 				Request.Method.GET,
 				"http://178.62.96.146/games/" + gameId + "/nighttime",
 				new Response.Listener<String>() {
@@ -196,7 +226,27 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 					}
 				}
 		);
-		VolleySingleton.getInstance().getRequestQueue().add(startRequest);
+		VolleySingleton.getInstance().getRequestQueue().add(request);
+	}
+
+	private void buzz(String role) {
+		StringRequest request = new StringRequest(
+				Request.Method.GET,
+				"http://178.62.96.146/games/" + gameId + "/buzz?role=" + role,
+				new Response.Listener<String>() {
+					@Override
+					public void onResponse(String response) {
+
+					}
+				},
+				new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+
+					}
+				}
+		);
+		VolleySingleton.getInstance().getRequestQueue().add(request);
 	}
 
 }
