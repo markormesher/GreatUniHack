@@ -45,7 +45,7 @@ public class Play_JoinGame extends ActionBarActivity {
 
 	private String gameId;
 	private String playerId;
-	private String currentPhotoPath;
+	private String currentPhotoPath = null;
 	BroadcastReceiver gameStarted = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -82,72 +82,112 @@ public class Play_JoinGame extends ActionBarActivity {
 
 				// send photo to network
 				Bitmap bm = BitmapFactory.decodeFile(currentPhotoPath);
-				bm = Bitmap.createScaledBitmap(bm, (int) Math.round(bm.getWidth() * 0.10), (int) Math.round(bm.getHeight() * 0.10), true);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-				byte[] b = baos.toByteArray();
-				final String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-				Request imageUploadQuery = new StringRequest(
-						Request.Method.POST,
-						"http://guh.markormesher.co.uk/upload.php",
-						new Response.Listener<String>() {
-							@Override
-							public void onResponse(String response) {
-								// send info to network
-								Request gameIdRequest = new JsonObjectRequest(
-										Request.Method.POST,
-										"http://178.62.96.146/players.json",
-										"{\"player\":{\"gcm_id\":\"" + gcmId + "\",\"game_id\":\"" + gameId + "\",\"photo_url\":\"" + response + "\"}}",
-										new Response.Listener<JSONObject>() {
-											@Override
-											public void onResponse(JSONObject response) {
-												try {
-													playerId = response.getString("id");
-												} catch (JSONException e) {
+				if (bm != null) {
+					bm = Bitmap.createScaledBitmap(bm, (int) Math.round(bm.getWidth() * 0.10), (int) Math.round(bm.getHeight() * 0.10), true);
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+					byte[] b = baos.toByteArray();
+					final String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+					Request imageUploadQuery = new StringRequest(
+							Request.Method.POST,
+							"http://guh.markormesher.co.uk/upload.php",
+							new Response.Listener<String>() {
+								@Override
+								public void onResponse(String response) {
+									// send info to network
+									Request gameIdRequest = new JsonObjectRequest(
+											Request.Method.POST,
+											"http://178.62.96.146/players.json",
+											"{\"player\":{\"gcm_id\":\"" + gcmId + "\",\"game_id\":\"" + gameId + "\",\"photo_url\":\"" + response + "\"}}",
+											new Response.Listener<JSONObject>() {
+												@Override
+												public void onResponse(JSONObject response) {
+													try {
+														playerId = response.getString("id");
+													} catch (JSONException e) {
+														Toast.makeText(Play_JoinGame.this, "Failed to join game.", Toast.LENGTH_LONG).show();
+														Play_JoinGame.this.finish();
+														return;
+													}
+
+													// swap layouts
+													findViewById(R.id.join_game_loading).setVisibility(View.GONE);
+													findViewById(R.id.join_game_done).setVisibility(View.VISIBLE);
+												}
+											},
+											new Response.ErrorListener() {
+												@Override
+												public void onErrorResponse(VolleyError error) {
 													Toast.makeText(Play_JoinGame.this, "Failed to join game.", Toast.LENGTH_LONG).show();
 													Play_JoinGame.this.finish();
-													return;
 												}
-
-												// swap layouts
-												findViewById(R.id.join_game_loading).setVisibility(View.GONE);
-												findViewById(R.id.join_game_done).setVisibility(View.VISIBLE);
 											}
-										},
-										new Response.ErrorListener() {
-											@Override
-											public void onErrorResponse(VolleyError error) {
-												Toast.makeText(Play_JoinGame.this, "Failed to join game.", Toast.LENGTH_LONG).show();
-												Play_JoinGame.this.finish();
-											}
+									) {
+										@Override
+										public Map<String, String> getHeaders() throws AuthFailureError {
+											return new HashMap<String, String>() {{
+												put("Content-Type", "application/json");
+											}};
 										}
-								) {
-									@Override
-									public Map<String, String> getHeaders() throws AuthFailureError {
-										return new HashMap<String, String>() {{
-											put("Content-Type", "application/json");
-										}};
-									}
-								};
-								VolleySingleton.getInstance().getRequestQueue().add(gameIdRequest);
+									};
+									VolleySingleton.getInstance().getRequestQueue().add(gameIdRequest);
+								}
+							},
+							new Response.ErrorListener() {
+								@Override
+								public void onErrorResponse(VolleyError error) {
+									Toast.makeText(Play_JoinGame.this, "Failed to upload selfie.", Toast.LENGTH_LONG).show();
+									Play_JoinGame.this.finish();
+								}
 							}
-						},
-						new Response.ErrorListener() {
-							@Override
-							public void onErrorResponse(VolleyError error) {
-								Toast.makeText(Play_JoinGame.this, "Failed to upload selfie.", Toast.LENGTH_LONG).show();
-								Play_JoinGame.this.finish();
-							}
+					) {
+						@Override
+						protected Map<String, String> getParams() throws AuthFailureError {
+							return new HashMap<String, String>() {{
+								put("image_data", encodedImage);
+							}};
 						}
-				) {
-					@Override
-					protected Map<String, String> getParams() throws AuthFailureError {
-						return new HashMap<String, String>() {{
-							put("image_data", encodedImage);
-						}};
-					}
-				};
-				VolleySingleton.getInstance().getRequestQueue().add(imageUploadQuery);
+					};
+					VolleySingleton.getInstance().getRequestQueue().add(imageUploadQuery);
+				} else {
+					// send info to network
+					Request gameIdRequest = new JsonObjectRequest(
+							Request.Method.POST,
+							"http://178.62.96.146/players.json",
+							"{\"player\":{\"gcm_id\":\"" + gcmId + "\",\"game_id\":\"" + gameId + "\",\"photo_url\":\"null\"}}",
+							new Response.Listener<JSONObject>() {
+								@Override
+								public void onResponse(JSONObject response) {
+									try {
+										playerId = response.getString("id");
+									} catch (JSONException e) {
+										Toast.makeText(Play_JoinGame.this, "Failed to join game.", Toast.LENGTH_LONG).show();
+										Play_JoinGame.this.finish();
+										return;
+									}
+
+									// swap layouts
+									findViewById(R.id.join_game_loading).setVisibility(View.GONE);
+									findViewById(R.id.join_game_done).setVisibility(View.VISIBLE);
+								}
+							},
+							new Response.ErrorListener() {
+								@Override
+								public void onErrorResponse(VolleyError error) {
+									Toast.makeText(Play_JoinGame.this, "Failed to join game.", Toast.LENGTH_LONG).show();
+									Play_JoinGame.this.finish();
+								}
+							}
+					) {
+						@Override
+						public Map<String, String> getHeaders() throws AuthFailureError {
+							return new HashMap<String, String>() {{
+								put("Content-Type", "application/json");
+							}};
+						}
+					};
+					VolleySingleton.getInstance().getRequestQueue().add(gameIdRequest);
+				}
 			}
 		});
 
