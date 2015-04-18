@@ -115,6 +115,8 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 				fragment = new HostFragment1();
 			} else {
 				fragment = new PlayerListFragment();
+				((PlayerListFragment) fragment).setIsHost(true);
+				((PlayerListFragment) fragment).setGameId(gameId);
 			}
 			fragment.setArguments(arguments);
 			return fragment;
