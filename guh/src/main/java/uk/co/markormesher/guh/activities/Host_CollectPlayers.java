@@ -9,10 +9,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.*;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +34,7 @@ public class Host_CollectPlayers extends ActionBarActivity {
 		public void onReceive(Context context, Intent intent) {
 			++playerCount;
 			((TextView) findViewById(R.id.players_so_far)).setText(getString(R.string.players_so_far, playerCount));
-			findViewById(R.id.start_game_button).setEnabled(playerCount >= 6);
+			findViewById(R.id.start_game_button).setEnabled(true); // TODO playerCount >= 6);
 		}
 	};
 
@@ -49,7 +51,7 @@ public class Host_CollectPlayers extends ActionBarActivity {
 		Log.d("WEREWOLF", "GCM ID: " + gcmId);
 
 		// generate a game ID
-		RequestQueue requestQueue = Volley.newRequestQueue(this);
+		final RequestQueue requestQueue = Volley.newRequestQueue(this);
 		final Request gameIdRequest = new JsonObjectRequest(
 				Request.Method.POST,
 				"http://178.62.96.146/games.json",
@@ -57,8 +59,6 @@ public class Host_CollectPlayers extends ActionBarActivity {
 				new Response.Listener<JSONObject>() {
 					@Override
 					public void onResponse(JSONObject response) {
-						Log.d("WEREWOLF", response.toString());
-
 						try {
 							gameId = response.getString("id");
 						} catch (JSONException e) {
@@ -105,11 +105,34 @@ public class Host_CollectPlayers extends ActionBarActivity {
 		findViewById(R.id.start_game_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent openSetRoles = new Intent(Host_CollectPlayers.this, Host_SetRoles.class);
-				openSetRoles.putExtra("game_id", gameId);
-				openSetRoles.putExtra("player_count", playerCount);
-				startActivity(openSetRoles);
-				Host_CollectPlayers.this.finish();
+				// loading icon
+				((LinearLayout) findViewById(R.id.generating_game_loading)).getChildAt(0).setVisibility(View.GONE);
+				findViewById(R.id.generating_game_loading).setVisibility(View.VISIBLE);
+
+				// send start notification to server
+				StringRequest startRequest = new StringRequest(
+						Request.Method.GET,
+						"http://178.62.96.146/games/" + gameId + "/start",
+						new Response.Listener<String>() {
+							@Override
+							public void onResponse(String response) {
+								// move to next activity
+								Intent openSetRoles = new Intent(Host_CollectPlayers.this, Host_SetRoles.class);
+								openSetRoles.putExtra("game_id", gameId);
+								openSetRoles.putExtra("player_count", playerCount);
+								startActivity(openSetRoles);
+								Host_CollectPlayers.this.finish();
+							}
+						},
+						new Response.ErrorListener() {
+							@Override
+							public void onErrorResponse(VolleyError error) {
+								Toast.makeText(Host_CollectPlayers.this, "Unable to start game.", Toast.LENGTH_LONG).show();
+								Host_CollectPlayers.this.finish();
+							}
+						}
+				);
+				requestQueue.add(startRequest);
 			}
 		});
 	}

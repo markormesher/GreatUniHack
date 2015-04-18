@@ -23,15 +23,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import uk.co.markormesher.guh.R;
 import uk.co.markormesher.guh.constants.Keys;
+
+import java.util.ArrayList;
 
 public class Play_Game extends ActionBarActivity {
 
 	private String gameId;
 	private String playerId;
 	private String role;
+	private ArrayList<Player> players = new ArrayList<>();
 
 	private boolean roleSet = false;
 	private boolean gameLoaded = false;
@@ -77,7 +82,15 @@ public class Play_Game extends ActionBarActivity {
 					@Override
 					public void onResponse(JSONObject response) {
 						// parse in players
-						// TODO
+						try {
+							JSONArray jsonPlayers = response.getJSONArray("players");
+							for (int i = 0; i < jsonPlayers.length(); ++i) {
+								JSONObject jsonPlayer = jsonPlayers.getJSONObject(i);
+								players.add(new Player(jsonPlayer.getString("id"), jsonPlayer.getString("photo_url")));
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
 
 						// done!
 						gameLoaded = true;
@@ -114,9 +127,6 @@ public class Play_Game extends ActionBarActivity {
 			// flip views
 			findViewById(R.id.game_loading).setVisibility(View.GONE);
 			viewPager.setVisibility(View.VISIBLE);
-
-			// set image
-
 		}
 	}
 
@@ -168,6 +178,25 @@ public class Play_Game extends ActionBarActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			return inflater.inflate(R.layout.fragment_play_game_2, container, false);
+		}
+	}
+
+	public class Player {
+
+		private String playerId;
+		private String photoUrl;
+
+		public Player(String playerId, String photoUrl) {
+			this.playerId = playerId;
+			this.photoUrl = photoUrl;
+		}
+
+		public String getPlayerId() {
+			return playerId;
+		}
+
+		public String getPhotoUrl() {
+			return photoUrl;
 		}
 	}
 
