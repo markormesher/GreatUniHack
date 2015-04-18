@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="activity_title_join_or_host">Werewolf: Host or Join?</string>
+	<string name="activity_title_join_or_host">MLHorrors: Host or Join?</string>
 	<string name="host_a_game">Host a Game</string>
 	<string name="join_a_game">Join a Game</string>
 </resources>
