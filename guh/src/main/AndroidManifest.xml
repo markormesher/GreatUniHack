@@ -42,6 +42,11 @@
 				android:screenOrientation="portrait"/>
 
 		<activity
+				android:name=".activities.Host_Game"
+				android:theme="@style/AppTheme"
+				android:screenOrientation="portrait"/>
+
+		<activity
 				android:name=".activities.Play_JoinGame"
 				android:theme="@style/AppTheme"
 				android:windowSoftInputMode="adjustResize"

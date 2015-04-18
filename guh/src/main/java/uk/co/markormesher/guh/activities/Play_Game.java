@@ -40,6 +40,7 @@ public class Play_Game extends ActionBarActivity {
 
 	private boolean roleSet = false;
 	private boolean gameLoaded = false;
+	private boolean isNighttime = false;
 
 	private RequestQueue requestQueue;
 
@@ -67,6 +68,21 @@ public class Play_Game extends ActionBarActivity {
 
 			// visual
 			findViewById(R.id.dead_overlay).setVisibility(View.VISIBLE);
+		}
+	};
+
+	BroadcastReceiver daytime = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			isNighttime = false;
+		}
+	};
+
+	BroadcastReceiver nighttime = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			isNighttime = true;
+			playNighttimeNoise();
 		}
 	};
 
@@ -139,7 +155,6 @@ public class Play_Game extends ActionBarActivity {
 				})
 				.setNegativeButton("No", null)
 				.show();
-
 	}
 
 	@Override
@@ -150,6 +165,12 @@ public class Play_Game extends ActionBarActivity {
 
 		IntentFilter iff2 = new IntentFilter(Keys.INTENT_DIED);
 		LocalBroadcastManager.getInstance(this).registerReceiver(died, iff2);
+
+		IntentFilter iff3 = new IntentFilter(Keys.INTENT_DAYTIME);
+		LocalBroadcastManager.getInstance(this).registerReceiver(daytime, iff3);
+
+		IntentFilter iff4 = new IntentFilter(Keys.INTENT_NIGHTTIME);
+		LocalBroadcastManager.getInstance(this).registerReceiver(nighttime, iff4);
 	}
 
 	@Override
@@ -157,6 +178,8 @@ public class Play_Game extends ActionBarActivity {
 		super.onPause();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(roleAssigned);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(died);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(daytime);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(nighttime);
 	}
 
 	private void checkAllLoaded() {
@@ -165,6 +188,33 @@ public class Play_Game extends ActionBarActivity {
 			findViewById(R.id.game_loading).setVisibility(View.GONE);
 			viewPager.setVisibility(View.VISIBLE);
 		}
+	}
+
+	private void playNighttimeNoise() {
+		if (!isNighttime) return;
+
+		// pick a noise
+		double rand = Math.random();
+		int cow;
+		if (rand < 0.25) {
+			cow = R.raw.cow1;
+		} else if (rand < 0.5) {
+			cow = R.raw.cow2;
+		} else if (rand < 0.75) {
+			cow = R.raw.cow3;
+		} else {
+			cow = R.raw.cow4;
+		}
+
+		// play noise
+		MediaPlayer player = MediaPlayer.create(Play_Game.this, cow);
+		player.start();
+		player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				playNighttimeNoise();
+			}
+		});
 	}
 
 	public class PlayPagerAdapter extends FragmentPagerAdapter {

@@ -52,6 +52,18 @@ public class GCMIntentService extends IntentService {
 						Intent i = new Intent(Keys.INTENT_DIED);
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
+
+					// daytime
+					if (action.equals("daytime")) {
+						Intent i = new Intent(Keys.INTENT_DAYTIME);
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
+
+					// nighttime
+					if (action.equals("nighttime")) {
+						Intent i = new Intent(Keys.INTENT_NIGHTTIME);
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
 				}
 			}
 		}

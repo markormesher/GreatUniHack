@@ -1,5 +1,6 @@
 package uk.co.markormesher.guh.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -123,7 +124,10 @@ public class Host_SetRoles extends ActionBarActivity {
 						new Response.Listener<JSONObject>() {
 							@Override
 							public void onResponse(JSONObject response) {
-
+								Intent openGodMode = new Intent(Host_SetRoles.this, Host_Game.class);
+								openGodMode.putExtra("game_id", gameId);
+								startActivity(openGodMode);
+								Host_SetRoles.this.finish();
 							}
 						},
 						new Response.ErrorListener() {
