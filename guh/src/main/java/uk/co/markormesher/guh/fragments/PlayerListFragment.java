@@ -81,12 +81,19 @@ public class PlayerListFragment extends Fragment {
 			final Player player = players.get(position);
 
 			// image
-			((NetworkImageView) view.findViewById(R.id.player_list_item_image)).setImageUrl(player.getPhotoUrl(), VolleySingleton.getInstance().getImageLoader());
 			((NetworkImageView) view.findViewById(R.id.player_list_item_image)).setDefaultImageResId(R.mipmap.ic_launcher);
+			((NetworkImageView) view.findViewById(R.id.player_list_item_image)).setImageUrl(player.getPhotoUrl(), VolleySingleton.getInstance().getImageLoader());
 
 			// role
 			if (player.getRole() != null)
 				((TextView) view.findViewById(R.id.player_list_item_role)).setText(player.getRole().toUpperCase());
+
+			// dead?
+			if (!player.isAlive()) {
+				view.findViewById(R.id.player_list_item_image).setAlpha(0.3f);
+				view.findViewById(R.id.player_list_item_x_image).setVisibility(View.VISIBLE);
+				view.findViewById(R.id.player_list_item_x_image).setAlpha(0.5f);
+			}
 
 			// click
 			if (isHost) view.setOnClickListener(new View.OnClickListener() {

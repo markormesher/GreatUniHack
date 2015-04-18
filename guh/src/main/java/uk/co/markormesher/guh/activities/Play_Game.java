@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -37,6 +38,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 
 	private String role;
 	private ArrayList<Player> players = new ArrayList<>();
+	private String playerId;
 	private boolean alive = true;
 
 	private boolean roleSet = false;
@@ -54,23 +56,35 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		}
 	};
 
-	BroadcastReceiver died = new BroadcastReceiver() {
+	BroadcastReceiver kill = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			// die
-			if (!alive) return;
-			alive = false;
+			// me
+			if (intent.getExtras().getString("player_id").equals(playerId)) {
+				// time for me to die
+				if (!alive) return;
+				alive = false;
 
-			// play sound
-			MediaPlayer player = MediaPlayer.create(Play_Game.this, R.raw.roar);
-			player.start();
+				// play sound
+				MediaPlayer player = MediaPlayer.create(Play_Game.this, R.raw.roar);
+				player.start();
 
-			// buzz
-			Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-			if (vibrator != null) vibrator.vibrate(3000);
+				// buzz
+				Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+				if (vibrator != null) vibrator.vibrate(3000);
 
-			// visual
-			findViewById(R.id.dead_overlay).setVisibility(View.VISIBLE);
+				// visual
+				findViewById(R.id.dead_overlay).setVisibility(View.VISIBLE);
+			}
+
+			// loop through players and update display
+			for (int i = 0; i < players.size(); ++i) {
+				if (players.get(i).getPlayerId().equals(intent.getExtras().getString("player_id"))) {
+					players.get(i).setAlive(false);
+				}
+			}
+
+			((ListView) Play_Game.this.viewPager.findViewById(R.id.player_list_view)).invalidateViews();
 		}
 	};
 
@@ -138,6 +152,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		// get game ID and player ID
 		Bundle extras = getIntent().getExtras();
 		String gameId = extras.getString("game_id");
+		playerId = extras.getString("player_id");
 
 		// set layout
 		setContentView(R.layout.activity_play_game);
@@ -206,8 +221,8 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		IntentFilter iff = new IntentFilter(Keys.INTENT_ROLE_ASSIGNED);
 		LocalBroadcastManager.getInstance(this).registerReceiver(roleAssigned, iff);
 
-		IntentFilter iff2 = new IntentFilter(Keys.INTENT_DIED);
-		LocalBroadcastManager.getInstance(this).registerReceiver(died, iff2);
+		IntentFilter iff2 = new IntentFilter(Keys.INTENT_KILL);
+		LocalBroadcastManager.getInstance(this).registerReceiver(kill, iff2);
 
 		IntentFilter iff3 = new IntentFilter(Keys.INTENT_DAYTIME);
 		LocalBroadcastManager.getInstance(this).registerReceiver(daytime, iff3);
@@ -229,7 +244,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 	protected void onPause() {
 		super.onPause();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(roleAssigned);
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(died);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(kill);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(daytime);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(nighttime);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(meta);

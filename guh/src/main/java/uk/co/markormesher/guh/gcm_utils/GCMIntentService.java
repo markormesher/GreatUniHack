@@ -48,8 +48,9 @@ public class GCMIntentService extends IntentService {
 					}
 
 					// time to die!
-					if (action.equals("died")) {
-						Intent i = new Intent(Keys.INTENT_DIED);
+					if (action.equals("kill")) {
+						Intent i = new Intent(Keys.INTENT_KILL);
+						i.putExtra("player_id", extras.getString("player_id"));
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
 
