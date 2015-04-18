@@ -232,7 +232,7 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 	private void buzz(String role) {
 		StringRequest request = new StringRequest(
 				Request.Method.GET,
-				"http://178.62.96.146/games/" + gameId + "/buzz?role=" + role,
+				"http://178.62.96.146/games/" + gameId + "/buzz/" + role,
 				new Response.Listener<String>() {
 					@Override
 					public void onResponse(String response) {
