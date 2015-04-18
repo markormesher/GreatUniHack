@@ -1,10 +1,10 @@
 package uk.co.markormesher.guh.activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.app.AlertDialog;
+import android.content.*;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -51,6 +51,22 @@ public class Play_Game extends ActionBarActivity {
 			role = intent.getExtras().getString("role");
 			roleSet = true;
 			checkAllLoaded();
+		}
+	};
+
+	BroadcastReceiver died = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// play sound
+			MediaPlayer player = MediaPlayer.create(Play_Game.this, R.raw.roar);
+			player.start();
+
+			// buzz
+			Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+			if (vibrator != null) vibrator.vibrate(3000);
+
+			// visual
+			findViewById(R.id.dead_overlay).setVisibility(View.VISIBLE);
 		}
 	};
 
@@ -110,16 +126,37 @@ public class Play_Game extends ActionBarActivity {
 	}
 
 	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle("Time to Head South...")
+				.setMessage("Are you sure you want to leave the village?")
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				})
+				.setNegativeButton("No", null)
+				.show();
+
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 		IntentFilter iff = new IntentFilter(Keys.INTENT_ROLE_ASSIGNED);
 		LocalBroadcastManager.getInstance(this).registerReceiver(roleAssigned, iff);
+
+		IntentFilter iff2 = new IntentFilter(Keys.INTENT_DIED);
+		LocalBroadcastManager.getInstance(this).registerReceiver(died, iff2);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(roleAssigned);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(died);
 	}
 
 	private void checkAllLoaded() {
@@ -141,7 +178,7 @@ public class Play_Game extends ActionBarActivity {
 			Bundle arguments = new Bundle();
 			if (i == 0) {
 				fragment = new PlayFragment1();
-				arguments.putInt("image", getResources().getIdentifier("drawable/" + role, null, getPackageName()));
+				arguments.putInt("image", getResources().getIdentifier("drawable/" + role + (role.equals("villager") && Math.random() < 0.5 ? "_2" : ""), null, getPackageName()));
 				arguments.putString("role", role);
 			} else {
 				fragment = new PlayFragment2();

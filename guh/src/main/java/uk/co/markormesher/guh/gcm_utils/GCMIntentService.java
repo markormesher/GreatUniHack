@@ -46,6 +46,12 @@ public class GCMIntentService extends IntentService {
 						i.putExtra("role", extras.getString("role"));
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
+
+					// time to die!
+					if (action.equals("died")) {
+						Intent i = new Intent(Keys.INTENT_DIED);
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
 				}
 			}
 		}

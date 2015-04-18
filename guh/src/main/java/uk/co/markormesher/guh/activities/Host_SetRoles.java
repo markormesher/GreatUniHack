@@ -131,6 +131,7 @@ public class Host_SetRoles extends ActionBarActivity {
 							public void onErrorResponse(VolleyError error) {
 								Toast.makeText(Host_SetRoles.this, "Failed to start game.", Toast.LENGTH_LONG).show();
 								Host_SetRoles.this.finish();
+								error.printStackTrace();
 							}
 						}
 				);
