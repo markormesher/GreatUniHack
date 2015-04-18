@@ -68,8 +68,12 @@ public class PlayerListFragment extends Fragment {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = convertView;
-			if (view == null) view = getActivity().getLayoutInflater().inflate(R.layout.player_list_item, null);
+			final View view;
+			if (convertView == null) {
+				view = getActivity().getLayoutInflater().inflate(R.layout.player_list_item, null);
+			} else {
+				view = convertView;
+			}
 
 			// get player
 			final Player player = players.get(position);
@@ -83,7 +87,7 @@ public class PlayerListFragment extends Fragment {
 				((TextView) view.findViewById(R.id.player_list_item_role)).setText(player.getRole().toUpperCase());
 
 			// click
-			if (isHost) view.setOnClickListener(new View.OnClickListener() {
+			if (isHost && player.isAlive()) view.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -96,6 +100,14 @@ public class PlayerListFragment extends Fragment {
 						public void onClick(DialogInterface dialog, int which) {
 							switch (which) {
 								case 0:
+									// update to dead
+									player.setAlive(false);
+									view.setOnClickListener(null);
+									view.findViewById(R.id.player_list_item_image).setAlpha(0.3f);
+									view.findViewById(R.id.player_list_item_x_image).setVisibility(View.VISIBLE);
+									view.findViewById(R.id.player_list_item_x_image).setAlpha(0.5f);
+
+									// send kill
 									JsonObjectRequest killRequest = new JsonObjectRequest(
 											Request.Method.POST,
 											"http://178.62.96.146/games/" + gameId + "/kill",

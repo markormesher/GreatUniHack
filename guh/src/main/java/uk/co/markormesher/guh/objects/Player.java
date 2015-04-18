@@ -5,6 +5,7 @@ public class Player {
 	private String playerId;
 	private String photoUrl;
 	private String role;
+	private boolean alive = true;
 
 	public Player(String playerId, String photoUrl, String role) {
 		this.playerId = playerId;
@@ -22,5 +23,13 @@ public class Player {
 
 	public String getRole() {
 		return role;
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
 	}
 }
