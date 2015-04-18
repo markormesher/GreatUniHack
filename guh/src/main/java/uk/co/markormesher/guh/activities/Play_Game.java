@@ -18,20 +18,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.co.markormesher.guh.R;
 import uk.co.markormesher.guh.constants.Keys;
+import uk.co.markormesher.guh.fragments.PlayerListFragment;
+import uk.co.markormesher.guh.objects.Player;
+import uk.co.markormesher.guh.utils.VolleySingleton;
 
 import java.util.ArrayList;
 
-public class Play_Game extends ActionBarActivity {
+public class Play_Game extends ActionBarActivity implements ActivityWithPlayers {
 
 	private String gameId;
 	private String playerId;
@@ -41,8 +42,6 @@ public class Play_Game extends ActionBarActivity {
 	private boolean roleSet = false;
 	private boolean gameLoaded = false;
 	private boolean isNighttime = false;
-
-	private RequestQueue requestQueue;
 
 	private ViewPager viewPager;
 
@@ -105,7 +104,6 @@ public class Play_Game extends ActionBarActivity {
 		viewPager.setAdapter(playPagerAdapter);
 
 		// get game info from server
-		requestQueue = Volley.newRequestQueue(this);
 		Request gameRequest = new JsonObjectRequest(
 				Request.Method.GET,
 				"http://178.62.96.146/games/" + gameId + ".json",
@@ -118,7 +116,7 @@ public class Play_Game extends ActionBarActivity {
 							JSONArray jsonPlayers = response.getJSONArray("players");
 							for (int i = 0; i < jsonPlayers.length(); ++i) {
 								JSONObject jsonPlayer = jsonPlayers.getJSONObject(i);
-								players.add(new Player(jsonPlayer.getString("id"), jsonPlayer.getString("photo_url")));
+								players.add(new Player(jsonPlayer.getString("id"), jsonPlayer.getString("photo_url"), null));
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -137,8 +135,7 @@ public class Play_Game extends ActionBarActivity {
 					}
 				}
 		);
-		requestQueue.add(gameRequest);
-		requestQueue.start();
+		VolleySingleton.getInstance().getRequestQueue().add(gameRequest);
 	}
 
 	@Override
@@ -217,6 +214,11 @@ public class Play_Game extends ActionBarActivity {
 		});
 	}
 
+	@Override
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
 	public class PlayPagerAdapter extends FragmentPagerAdapter {
 		public PlayPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -231,7 +233,7 @@ public class Play_Game extends ActionBarActivity {
 				arguments.putInt("image", getResources().getIdentifier("drawable/" + role + (role.equals("villager") && Math.random() < 0.5 ? "_2" : ""), null, getPackageName()));
 				arguments.putString("role", role);
 			} else {
-				fragment = new PlayFragment2();
+				fragment = new PlayerListFragment();
 			}
 			fragment.setArguments(arguments);
 			return fragment;
@@ -258,32 +260,6 @@ public class Play_Game extends ActionBarActivity {
 			((ImageView) view.findViewById(R.id.player_profile_image)).setImageResource(getArguments().getInt("image"));
 			((TextView) view.findViewById(R.id.player_profile_message)).setText(role.equals("villager") ? "You are but a humble villager." : "You are a " + role + ".");
 			return view;
-		}
-	}
-
-	public static class PlayFragment2 extends Fragment {
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			return inflater.inflate(R.layout.fragment_play_game_2, container, false);
-		}
-	}
-
-	public class Player {
-
-		private String playerId;
-		private String photoUrl;
-
-		public Player(String playerId, String photoUrl) {
-			this.playerId = playerId;
-			this.photoUrl = photoUrl;
-		}
-
-		public String getPlayerId() {
-			return playerId;
-		}
-
-		public String getPhotoUrl() {
-			return photoUrl;
 		}
 	}
 

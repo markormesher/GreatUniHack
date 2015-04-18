@@ -8,13 +8,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 import uk.co.markormesher.guh.R;
+import uk.co.markormesher.guh.utils.VolleySingleton;
 
 public class Host_SetRoles extends ActionBarActivity {
 
@@ -116,7 +115,6 @@ public class Host_SetRoles extends ActionBarActivity {
 				int hackers = hackerSeekbar.getProgress();
 
 				// post to server
-				RequestQueue requestQueue = Volley.newRequestQueue(Host_SetRoles.this);
 				JsonObjectRequest rolesRequest = new JsonObjectRequest(
 						Request.Method.POST,
 						"http://178.62.96.146/games/" + gameId + "/roles",
@@ -139,7 +137,7 @@ public class Host_SetRoles extends ActionBarActivity {
 							}
 						}
 				);
-				requestQueue.add(rolesRequest);
+				VolleySingleton.getInstance().getRequestQueue().add(rolesRequest);
 			}
 		});
 	}

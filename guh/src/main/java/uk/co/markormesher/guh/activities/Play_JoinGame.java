@@ -10,14 +10,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.android.volley.*;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.co.markormesher.guh.R;
 import uk.co.markormesher.guh.constants.Keys;
 import uk.co.markormesher.guh.gcm_utils.GCMUtils;
+import uk.co.markormesher.guh.utils.VolleySingleton;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +64,6 @@ public class Play_JoinGame extends ActionBarActivity {
 				findViewById(R.id.join_game_loader).setVisibility(View.VISIBLE);
 
 				// send to network
-				final RequestQueue requestQueue = Volley.newRequestQueue(Play_JoinGame.this);
 				Request gameIdRequest = new JsonObjectRequest(
 						Request.Method.POST,
 						"http://178.62.96.146/players.json",
@@ -97,8 +99,7 @@ public class Play_JoinGame extends ActionBarActivity {
 						}};
 					}
 				};
-				requestQueue.add(gameIdRequest);
-				requestQueue.start();
+				VolleySingleton.getInstance().getRequestQueue().add(gameIdRequest);
 			}
 		});
 	}

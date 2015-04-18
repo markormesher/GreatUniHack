@@ -13,25 +13,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.co.markormesher.guh.R;
+import uk.co.markormesher.guh.fragments.PlayerListFragment;
+import uk.co.markormesher.guh.objects.Player;
+import uk.co.markormesher.guh.utils.VolleySingleton;
 
 import java.util.ArrayList;
 
-public class Host_Game extends ActionBarActivity {
+public class Host_Game extends ActionBarActivity implements ActivityWithPlayers {
 
 	private String gameId;
 	private ArrayList<Player> players = new ArrayList<>();
-
-	private RequestQueue requestQueue;
 
 	private ViewPager viewPager;
 
@@ -53,7 +52,6 @@ public class Host_Game extends ActionBarActivity {
 		viewPager.setAdapter(hostPagerAdapter);
 
 		// get game info from server
-		requestQueue = Volley.newRequestQueue(this);
 		Request gameRequest = new JsonObjectRequest(
 				Request.Method.GET,
 				"http://178.62.96.146/games/" + gameId + ".json",
@@ -85,8 +83,7 @@ public class Host_Game extends ActionBarActivity {
 					}
 				}
 		);
-		requestQueue.add(gameRequest);
-		requestQueue.start();
+		VolleySingleton.getInstance().getRequestQueue().add(gameRequest);
 	}
 
 	@Override
@@ -117,7 +114,7 @@ public class Host_Game extends ActionBarActivity {
 			if (i == 0) {
 				fragment = new HostFragment1();
 			} else {
-				fragment = new HostFragment2();
+				fragment = new PlayerListFragment();
 			}
 			fragment.setArguments(arguments);
 			return fragment;
@@ -155,11 +152,9 @@ public class Host_Game extends ActionBarActivity {
 		}
 	}
 
-	public static class HostFragment2 extends Fragment {
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			return inflater.inflate(R.layout.fragment_play_game_2, container, false);
-		}
+	@Override
+	public ArrayList<Player> getPlayers() {
+		return players;
 	}
 
 	private void startDaytime() {
@@ -179,7 +174,7 @@ public class Host_Game extends ActionBarActivity {
 					}
 				}
 		);
-		requestQueue.add(startRequest);
+		VolleySingleton.getInstance().getRequestQueue().add(startRequest);
 	}
 
 	private void startNighttime() {
@@ -199,32 +194,7 @@ public class Host_Game extends ActionBarActivity {
 					}
 				}
 		);
-		requestQueue.add(startRequest);
-	}
-
-	public class Player {
-
-		private String playerId;
-		private String photoUrl;
-		private String role;
-
-		public Player(String playerId, String photoUrl, String role) {
-			this.playerId = playerId;
-			this.photoUrl = photoUrl;
-			this.role = role;
-		}
-
-		public String getPlayerId() {
-			return playerId;
-		}
-
-		public String getPhotoUrl() {
-			return photoUrl;
-		}
-
-		public String getRole() {
-			return role;
-		}
+		VolleySingleton.getInstance().getRequestQueue().add(startRequest);
 	}
 
 }
