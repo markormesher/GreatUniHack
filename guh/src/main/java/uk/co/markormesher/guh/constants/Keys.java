@@ -8,5 +8,6 @@ public class Keys {
 
 	public final static String INTENT_PLAYER_JOINED = "uk.co.markormesher.guh.INTENT_PLAYER_JOINED";
 	public final static String INTENT_GAME_STARTED = "uk.co.markormesher.guh.INTENT_GAME_STARTED";
+	public final static String INTENT_ROLE_ASSIGNED = "uk.co.markormesher.guh.INTENT_ROLE_ASSIGNED";
 
 }

@@ -1,0 +1,107 @@
+<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingTop="@dimen/activity_vertical_margin"
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:orientation="vertical">
+
+	<LinearLayout
+			android:id="@+id/set_roles_input"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_centerInParent="true">
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/set_roles_intro"
+				android:gravity="center"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<TextView
+				android:id="@+id/role_label_villager"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/set_role_label_villager"/>
+
+		<SeekBar
+				android:id="@+id/role_count_villager"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:max="20"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<TextView
+				android:id="@+id/role_label_wolf"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/set_role_label_wolf"/>
+
+		<SeekBar
+				android:id="@+id/role_count_wolf"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:max="20"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<TextView
+				android:id="@+id/role_label_seer"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/set_role_label_seer"/>
+
+		<SeekBar
+				android:id="@+id/role_count_seer"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:max="20"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<TextView
+				android:id="@+id/role_label_healer"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/set_role_label_healer"/>
+
+		<SeekBar
+				android:id="@+id/role_count_healer"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:max="20"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<TextView
+				android:id="@+id/role_label_hacker"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/set_role_label_hacker"/>
+
+		<SeekBar
+				android:id="@+id/role_count_hacker"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:max="20"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
+		<Button
+				android:id="@+id/set_roles_done_button"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/set_roles_done_label"/>
+
+	</LinearLayout>
+
+	<ProgressBar
+			android:id="@+id/set_roles_loading"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="?android:progressBarStyleInverse"
+			android:layout_centerInParent="true"
+			android:visibility="gone"/>
+
+</RelativeLayout>

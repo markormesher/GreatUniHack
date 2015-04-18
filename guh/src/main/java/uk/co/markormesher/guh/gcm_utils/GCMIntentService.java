@@ -31,13 +31,19 @@ public class GCMIntentService extends IntentService {
 					// a player joined
 					if (action.equals("player_joined")) {
 						Intent i = new Intent(Keys.INTENT_PLAYER_JOINED);
-						i.putExtra("player_id", extras.getString("player_id"));
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
 
 					// the game started
 					if (action.equals("game_started")) {
 						Intent i = new Intent(Keys.INTENT_GAME_STARTED);
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
+
+					// role assigned
+					if (action.equals("role_assigned")) {
+						Intent i = new Intent(Keys.INTENT_ROLE_ASSIGNED);
+						i.putExtra("role", extras.getString("role"));
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
 				}

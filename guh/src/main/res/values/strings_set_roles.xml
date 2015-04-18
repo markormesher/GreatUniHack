@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="activity_title_set_roles">Hosting: Roles</string>
+	<string name="set_roles_intro">Select the numbers for each role:</string>
+	<string name="set_roles_done_label">Done!</string>
+
+	<string name="set_role_label_villager">Villager (%d)</string>
+	<string name="set_role_label_wolf">Wolf (%d)</string>
+	<string name="set_role_label_seer">Seer (%d)</string>
+	<string name="set_role_label_healer">Healer (%d)</string>
+	<string name="set_role_label_hacker">Hacker (%d)</string>
+</resources>

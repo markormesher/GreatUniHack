@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.*;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,18 +20,18 @@ import uk.co.markormesher.guh.R;
 import uk.co.markormesher.guh.constants.Keys;
 import uk.co.markormesher.guh.gcm_utils.GCMUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Host_CollectPlayers extends ActionBarActivity {
 
-	final ArrayList<String> players = new ArrayList<>();
+	private String gameId;
+	private int playerCount = 0;
 	BroadcastReceiver playerAdded = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			players.add(intent.getExtras().getString("player_id"));
-			((TextView) findViewById(R.id.players_so_far)).setText(getString(R.string.players_so_far, players.size()));
+			++playerCount;
+			((TextView) findViewById(R.id.players_so_far)).setText(getString(R.string.players_so_far, playerCount));
 		}
 	};
 
@@ -49,20 +49,17 @@ public class Host_CollectPlayers extends ActionBarActivity {
 
 		// generate a game ID
 		RequestQueue requestQueue = Volley.newRequestQueue(this);
-		Request gameIdRequest = new StringRequest(
-				Request.Method.GET,
-				//"http://178.62.96.146/api/game.json",
-				"http://point.markormesher.co.uk/api",
-				new Response.Listener<String>() {
+		final Request gameIdRequest = new JsonObjectRequest(
+				Request.Method.POST,
+				"http://178.62.96.146/games.json",
+				"{\"game\":{\"host_gcm_id\":\"" + gcmId + "\"}}",
+				new Response.Listener<JSONObject>() {
 					@Override
-					public void onResponse(String response) {
-						// TODO get from the real backend
-						response = "{\"game_id\":\"123\"}";
+					public void onResponse(JSONObject response) {
+						Log.d("WEREWOLF", response.toString());
 
-						String gameId;
 						try {
-							JSONObject jsonResponse = new JSONObject(response);
-							gameId = jsonResponse.getString("game_id");
+							gameId = response.getString("id");
 						} catch (JSONException e) {
 							Toast.makeText(Host_CollectPlayers.this, "Failed to start game.", Toast.LENGTH_LONG).show();
 							Host_CollectPlayers.this.finish();
@@ -75,7 +72,7 @@ public class Host_CollectPlayers extends ActionBarActivity {
 
 						// set texts
 						((TextView) findViewById(R.id.game_id_output)).setText("Game ID: " + gameId);
-						((TextView) findViewById(R.id.players_so_far)).setText(getString(R.string.players_so_far, players.size()));
+						((TextView) findViewById(R.id.players_so_far)).setText(getString(R.string.players_so_far, playerCount));
 					}
 				},
 				new Response.ErrorListener() {
@@ -107,8 +104,11 @@ public class Host_CollectPlayers extends ActionBarActivity {
 		findViewById(R.id.start_game_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO go to next activity
-				Toast.makeText(Host_CollectPlayers.this, "Players: " + players.toString(), Toast.LENGTH_LONG).show();
+				Intent openSetRoles = new Intent(Host_CollectPlayers.this, Host_SetRoles.class);
+				openSetRoles.putExtra("game_id", gameId);
+				openSetRoles.putExtra("player_count", playerCount);
+				startActivity(openSetRoles);
+				Host_CollectPlayers.this.finish();
 			}
 		});
 	}

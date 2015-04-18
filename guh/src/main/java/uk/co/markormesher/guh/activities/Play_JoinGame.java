@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.android.volley.*;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,20 +63,16 @@ public class Play_JoinGame extends ActionBarActivity {
 				findViewById(R.id.join_game_loader).setVisibility(View.VISIBLE);
 
 				// send to network
-				RequestQueue requestQueue = Volley.newRequestQueue(Play_JoinGame.this);
-				Request gameIdRequest = new StringRequest(
-						Request.Method.GET,
-						//"http://178.62.96.146/api/game.json",
-						"http://point.markormesher.co.uk/api",
-						new Response.Listener<String>() {
+				final RequestQueue requestQueue = Volley.newRequestQueue(Play_JoinGame.this);
+				Request gameIdRequest = new JsonObjectRequest(
+						Request.Method.POST,
+						"http://178.62.96.146/players.json",
+						"{\"player\":{\"gcm_id\":\"" + gcmId + "\",\"game_id\":\"" + gameId + "\"}}",
+						new Response.Listener<JSONObject>() {
 							@Override
-							public void onResponse(String response) {
-								// TODO get from the real backend
-								response = "{\"player_id\":\"456\"}";
-
+							public void onResponse(JSONObject response) {
 								try {
-									JSONObject jsonResponse = new JSONObject(response);
-									playerId = jsonResponse.getString("player_id");
+									playerId = response.getString("id");
 								} catch (JSONException e) {
 									Toast.makeText(Play_JoinGame.this, "Failed to join game.", Toast.LENGTH_LONG).show();
 									Play_JoinGame.this.finish();
@@ -96,14 +92,6 @@ public class Play_JoinGame extends ActionBarActivity {
 							}
 						}
 				) {
-					@Override
-					protected Map<String, String> getParams() throws AuthFailureError {
-						return new HashMap<String, String>() {{
-							put("game_id", gameId);
-							put("gcm_id", gcmId);
-						}};
-					}
-
 					@Override
 					public Map<String, String> getHeaders() throws AuthFailureError {
 						return new HashMap<String, String>() {{

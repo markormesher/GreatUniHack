@@ -35,6 +35,10 @@
 				android:theme="@style/AppTheme"/>
 
 		<activity
+				android:name=".activities.Host_SetRoles"
+				android:theme="@style/AppTheme"/>
+
+		<activity
 				android:name=".activities.Play_JoinGame"
 				android:theme="@style/AppTheme"
 				android:windowSoftInputMode="adjustResize"/>

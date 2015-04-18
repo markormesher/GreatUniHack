@@ -42,17 +42,20 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/ask_players_to_scan"
-				android:gravity="center"/>
+				android:gravity="center"
+				android:layout_marginBottom="@dimen/margin_medium"/>
 
 		<TextView
 				android:id="@+id/game_id_output"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/margin_medium"/>
 
 		<TextView
 				android:id="@+id/players_so_far"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/margin_medium"/>
 
 		<Button
 				android:id="@+id/start_game_button"
