@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,6 +34,7 @@ import uk.co.markormesher.guh.utils.VolleySingleton;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,7 +82,7 @@ public class Play_JoinGame extends ActionBarActivity {
 
 				// send photo to network
 				Bitmap bm = BitmapFactory.decodeFile(currentPhotoPath);
-				bm = Bitmap.createScaledBitmap(bm, (int) Math.round(bm.getWidth() * 0.25), (int) Math.round(bm.getHeight() * 0.25), true);
+				bm = Bitmap.createScaledBitmap(bm, (int) Math.round(bm.getWidth() * 0.10), (int) Math.round(bm.getHeight() * 0.10), true);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
 				byte[] b = baos.toByteArray();
@@ -182,6 +185,35 @@ public class Play_JoinGame extends ActionBarActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 1 && resultCode == RESULT_OK) {
+			try {
+				ExifInterface ei = new ExifInterface(currentPhotoPath);
+				int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+				if (orientation!=ExifInterface.ORIENTATION_NORMAL) {
+					Bitmap photo = BitmapFactory.decodeFile(currentPhotoPath);
+					Matrix matrix = new Matrix();
+					switch (orientation) {
+						case ExifInterface.ORIENTATION_ROTATE_90:
+							matrix.postRotate(90);
+							break;
+						case ExifInterface.ORIENTATION_ROTATE_180:
+							matrix.postRotate(180);
+							break;
+						case ExifInterface.ORIENTATION_ROTATE_270:
+							matrix.postRotate(270);
+							break;
+					}
+					photo = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight(), matrix, true);
+					FileOutputStream foStream;
+					try {
+						foStream = new FileOutputStream(currentPhotoPath);
+						photo.compress(Bitmap.CompressFormat.JPEG, 85, foStream);
+						foStream.flush();
+						foStream.close();
+					} catch (Exception e) {}
+				}
+			} catch (IOException e) {
+				return;
+			}
 			((ImageView) findViewById(R.id.join_game_selfie)).setImageURI(Uri.fromFile(new File(currentPhotoPath)));
 		}
 	}

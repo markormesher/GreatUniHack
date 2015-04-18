@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,6 +110,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		// set layout
 		setContentView(R.layout.activity_play_game);
 		setTitle(getString(R.string.activity_title_game, gameId));
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		// view pager stuff
 		PlayPagerAdapter playPagerAdapter = new PlayPagerAdapter(getSupportFragmentManager());
