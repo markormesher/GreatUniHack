@@ -9,29 +9,41 @@
 		android:orientation="vertical">
 
 	<LinearLayout
-			android:id="@+id/generating_game_loading"
-			android:layout_width="wrap_content"
+			android:id="@+id/join_game_loading"
+			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
 			android:gravity="center"
 			android:layout_centerInParent="true">
 
-		<TextView
+		<EditText
+				android:id="@+id/game_id_input"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:hint="@string/game_id_placeholder"
+				android:inputType="number"
+				android:gravity="center">
+			<requestFocus/>
+		</EditText>
+
+		<Button
+				android:id="@+id/join_game_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/generating_game"
-				android:gravity="center"/>
+				android:text="@string/join_button"/>
 
 		<ProgressBar
+				android:id="@+id/join_game_loader"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				style="?android:progressBarStyleInverse"/>
+				style="?android:progressBarStyleInverse"
+				android:visibility="gone"/>
 
 	</LinearLayout>
 
 	<LinearLayout
-			android:id="@+id/qr_code_display"
-			android:layout_width="wrap_content"
+			android:id="@+id/join_game_done"
+			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
 			android:gravity="center"
@@ -41,24 +53,7 @@
 		<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/ask_players_to_scan"
-				android:gravity="center"/>
-
-		<TextView
-				android:id="@+id/game_id_output"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
-
-		<TextView
-				android:id="@+id/players_so_far"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
-
-		<Button
-				android:id="@+id/start_game_button"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/start_game_button"/>
+				android:text="@string/join_game_done"/>
 
 	</LinearLayout>
 

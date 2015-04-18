@@ -45,7 +45,7 @@ public class Host_CollectPlayers extends ActionBarActivity {
 
 		// get the GCM ID
 		final String gcmId = GCMUtils.getRegistrationID(this);
-		Log.d("WEREWOLF", "GCMID: " + gcmId);
+		Log.d("WEREWOLF", "GCM ID: " + gcmId);
 
 		// generate a game ID
 		RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -57,10 +57,12 @@ public class Host_CollectPlayers extends ActionBarActivity {
 					@Override
 					public void onResponse(String response) {
 						// TODO get from the real backend
+						response = "{\"game_id\":\"123\"}";
+
 						String gameId;
 						try {
 							JSONObject jsonResponse = new JSONObject(response);
-							gameId = jsonResponse.getString("latestApiVersion");
+							gameId = jsonResponse.getString("game_id");
 						} catch (JSONException e) {
 							Toast.makeText(Host_CollectPlayers.this, "Failed to start game.", Toast.LENGTH_LONG).show();
 							Host_CollectPlayers.this.finish();
@@ -72,7 +74,7 @@ public class Host_CollectPlayers extends ActionBarActivity {
 						findViewById(R.id.qr_code_display).setVisibility(View.VISIBLE);
 
 						// set texts
-						((TextView) findViewById(R.id.qr_code_output)).setText("Game ID: " + gameId); // TODO make a QR code
+						((TextView) findViewById(R.id.game_id_output)).setText("Game ID: " + gameId);
 						((TextView) findViewById(R.id.players_so_far)).setText(getString(R.string.players_so_far, players.size()));
 					}
 				},

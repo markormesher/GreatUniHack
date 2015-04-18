@@ -7,5 +7,6 @@ public class Keys {
 	public final static String GCM_PREFS = "GCM_PREFS";
 
 	public final static String INTENT_PLAYER_JOINED = "uk.co.markormesher.guh.INTENT_PLAYER_JOINED";
+	public final static String INTENT_GAME_STARTED = "uk.co.markormesher.guh.INTENT_GAME_STARTED";
 
 }

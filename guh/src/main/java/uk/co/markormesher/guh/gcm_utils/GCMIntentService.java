@@ -34,6 +34,12 @@ public class GCMIntentService extends IntentService {
 						i.putExtra("player_id", extras.getString("player_id"));
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
+
+					// the game started
+					if (action.equals("game_started")) {
+						Intent i = new Intent(Keys.INTENT_GAME_STARTED);
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
 				}
 			}
 		}

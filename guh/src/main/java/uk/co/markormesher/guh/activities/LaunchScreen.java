@@ -45,13 +45,13 @@ public class LaunchScreen extends ActionBarActivity {
 			public void onClick(View v) {
 				Intent openPlayerCollection = new Intent(LaunchScreen.this, Host_CollectPlayers.class);
 				startActivity(openPlayerCollection);
-				LaunchScreen.this.finish();
 			}
 		});
 		findViewById(R.id.join_a_game_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				Intent openJoinGame = new Intent(LaunchScreen.this, Play_JoinGame.class);
+				startActivity(openJoinGame);
 			}
 		});
 	}

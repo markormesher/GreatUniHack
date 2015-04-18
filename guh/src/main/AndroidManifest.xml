@@ -34,6 +34,15 @@
 				android:name=".activities.Host_CollectPlayers"
 				android:theme="@style/AppTheme"/>
 
+		<activity
+				android:name=".activities.Play_JoinGame"
+				android:theme="@style/AppTheme"
+				android:windowSoftInputMode="adjustResize"/>
+
+		<activity
+				android:name=".activities.Play_Game"
+				android:theme="@style/AppTheme"/>
+
 		<meta-data
 				android:name="com.google.android.gms.version"
 				android:value="@integer/google_play_services_version"/>
