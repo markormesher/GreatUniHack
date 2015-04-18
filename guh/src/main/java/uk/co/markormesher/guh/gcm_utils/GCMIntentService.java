@@ -53,6 +53,12 @@ public class GCMIntentService extends IntentService {
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
 
+					// meta as fuck sir
+					if (action.equals("meta")) {
+						Intent i = new Intent(Keys.INTENT_META);
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
+
 					// daytime
 					if (action.equals("daytime")) {
 						Intent i = new Intent(Keys.INTENT_DAYTIME);

@@ -35,7 +35,6 @@ import java.util.ArrayList;
 public class Play_Game extends ActionBarActivity implements ActivityWithPlayers {
 
 	private String gameId;
-	private String playerId;
 	private String role;
 	private ArrayList<Player> players = new ArrayList<>();
 
@@ -70,6 +69,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		}
 	};
 
+
 	BroadcastReceiver daytime = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -85,6 +85,19 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		}
 	};
 
+	BroadcastReceiver meta = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// play sound
+			MediaPlayer player = MediaPlayer.create(Play_Game.this, R.raw.meta);
+			player.start();
+
+			// buzz
+			Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+			if (vibrator != null) vibrator.vibrate(3000);
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,7 +105,6 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		// get game ID and player ID
 		Bundle extras = getIntent().getExtras();
 		gameId = extras.getString("game_id");
-		playerId = extras.getString("player_id");
 
 		// set layout
 		setContentView(R.layout.activity_play_game);
@@ -168,6 +180,9 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 
 		IntentFilter iff4 = new IntentFilter(Keys.INTENT_NIGHTTIME);
 		LocalBroadcastManager.getInstance(this).registerReceiver(nighttime, iff4);
+
+		IntentFilter iff5 = new IntentFilter(Keys.INTENT_META);
+		LocalBroadcastManager.getInstance(this).registerReceiver(meta, iff5);
 	}
 
 	@Override
@@ -177,6 +192,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(died);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(daytime);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(nighttime);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(meta);
 	}
 
 	private void checkAllLoaded() {

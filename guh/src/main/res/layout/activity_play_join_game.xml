@@ -16,13 +16,21 @@
 			android:gravity="center"
 			android:layout_centerInParent="true">
 
+		<ImageView
+				android:id="@+id/join_game_selfie"
+				android:layout_width="80dp"
+				android:layout_height="80dp"
+				android:scaleType="centerCrop"
+				android:layout_marginBottom="@dimen/margin_medium"/>
+
 		<EditText
 				android:id="@+id/game_id_input"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:hint="@string/game_id_placeholder"
 				android:inputType="number"
-				android:gravity="center">
+				android:gravity="center"
+				android:layout_marginBottom="@dimen/margin_medium">
 			<requestFocus/>
 		</EditText>
 

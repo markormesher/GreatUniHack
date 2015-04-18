@@ -86,13 +86,16 @@ public class PlayerListFragment extends Fragment {
 			if (isHost) view.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					new AlertDialog.Builder(getActivity())
-							.setIcon(android.R.drawable.ic_dialog_alert)
-							.setTitle("Kill?")
-							.setMessage("Kill this person?")
-							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+					builder.setTitle("Actions");
+					builder.setItems(new String[]{
+							"Kill",
+							"META"
+					}, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							switch (which) {
+								case 0:
 									JsonObjectRequest killRequest = new JsonObjectRequest(
 											Request.Method.POST,
 											"http://178.62.96.146/games/" + gameId + "/kill",
@@ -111,10 +114,34 @@ public class PlayerListFragment extends Fragment {
 											}
 									);
 									VolleySingleton.getInstance().getRequestQueue().add(killRequest);
-								}
-							})
-							.setNegativeButton("No", null)
-							.show();
+									break;
+								case 1:
+									JsonObjectRequest metaRequest = new JsonObjectRequest(
+											Request.Method.POST,
+											"http://178.62.96.146/games/" + gameId + "/meta",
+											"{\"player\":{\"id\":\"" + player.getPlayerId() + "\"}}",
+											new Response.Listener<JSONObject>() {
+												@Override
+												public void onResponse(JSONObject response) {
+
+												}
+											},
+											new Response.ErrorListener() {
+												@Override
+												public void onErrorResponse(VolleyError error) {
+
+												}
+											}
+									);
+									VolleySingleton.getInstance().getRequestQueue().add(metaRequest);
+									break;
+							}
+							dialog.dismiss();
+						}
+					});
+					AlertDialog dialog = builder.create();
+					dialog.setCanceledOnTouchOutside(true);
+					dialog.show();
 				}
 			});
 			return view;
