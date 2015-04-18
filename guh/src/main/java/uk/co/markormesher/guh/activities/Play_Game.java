@@ -35,9 +35,9 @@ import java.util.ArrayList;
 
 public class Play_Game extends ActionBarActivity implements ActivityWithPlayers {
 
-	private String gameId;
 	private String role;
 	private ArrayList<Player> players = new ArrayList<>();
+	private boolean alive = true;
 
 	private boolean roleSet = false;
 	private boolean gameLoaded = false;
@@ -57,6 +57,10 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 	BroadcastReceiver died = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			// die
+			if (!alive) return;
+			alive = false;
+
 			// play sound
 			MediaPlayer player = MediaPlayer.create(Play_Game.this, R.raw.roar);
 			player.start();
@@ -102,10 +106,26 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 	BroadcastReceiver buzz = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getExtras().getString("role").equals(role)) {
+			if (alive && intent.getExtras().getString("role").equals(role)) {
 				// buzz
 				Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-				if (vibrator != null) vibrator.vibrate(1500);
+				if (vibrator != null) vibrator.vibrate(300);
+			}
+
+		}
+	};
+
+	BroadcastReceiver noTalking = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (!alive) {
+				// play sound
+				MediaPlayer player = MediaPlayer.create(Play_Game.this, R.raw.no_talking);
+				player.start();
+
+				// buzz
+				Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+				if (vibrator != null) vibrator.vibrate(3000);
 			}
 
 		}
@@ -117,7 +137,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 
 		// get game ID and player ID
 		Bundle extras = getIntent().getExtras();
-		gameId = extras.getString("game_id");
+		String gameId = extras.getString("game_id");
 
 		// set layout
 		setContentView(R.layout.activity_play_game);
@@ -199,7 +219,10 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		LocalBroadcastManager.getInstance(this).registerReceiver(meta, iff5);
 
 		IntentFilter iff6 = new IntentFilter(Keys.INTENT_BUZZ);
-		LocalBroadcastManager.getInstance(this).registerReceiver(meta, iff6);
+		LocalBroadcastManager.getInstance(this).registerReceiver(buzz, iff6);
+
+		IntentFilter iff7 = new IntentFilter(Keys.INTENT_NO_TALKING);
+		LocalBroadcastManager.getInstance(this).registerReceiver(noTalking, iff7);
 	}
 
 	@Override
@@ -211,6 +234,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(nighttime);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(meta);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(buzz);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(noTalking);
 	}
 
 	private void checkAllLoaded() {

@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import org.json.JSONObject;
+import uk.co.markormesher.guh.ContextHack;
 import uk.co.markormesher.guh.R;
 import uk.co.markormesher.guh.activities.ActivityWithPlayers;
 import uk.co.markormesher.guh.objects.Player;
@@ -87,22 +89,28 @@ public class PlayerListFragment extends Fragment {
 				((TextView) view.findViewById(R.id.player_list_item_role)).setText(player.getRole().toUpperCase());
 
 			// click
-			if (isHost && player.isAlive()) view.setOnClickListener(new View.OnClickListener() {
+			if (isHost) view.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 					builder.setTitle("Actions");
 					builder.setItems(new String[]{
 							"Kill",
-							"META"
+							"META",
+							"\"Ghosts can't talk\""
 					}, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							switch (which) {
 								case 0:
+									// done already?
+									if (!player.isAlive()) {
+										Toast.makeText(ContextHack.getContext(), "Already dead.", Toast.LENGTH_LONG).show();
+										return;
+									}
+
 									// update to dead
 									player.setAlive(false);
-									view.setOnClickListener(null);
 									view.findViewById(R.id.player_list_item_image).setAlpha(0.3f);
 									view.findViewById(R.id.player_list_item_x_image).setVisibility(View.VISIBLE);
 									view.findViewById(R.id.player_list_item_x_image).setAlpha(0.5f);
@@ -127,6 +135,7 @@ public class PlayerListFragment extends Fragment {
 									);
 									VolleySingleton.getInstance().getRequestQueue().add(killRequest);
 									break;
+
 								case 1:
 									JsonObjectRequest metaRequest = new JsonObjectRequest(
 											Request.Method.POST,
@@ -147,6 +156,34 @@ public class PlayerListFragment extends Fragment {
 									);
 									VolleySingleton.getInstance().getRequestQueue().add(metaRequest);
 									break;
+
+								case 2:
+								// done already?
+								if (player.isAlive()) {
+									Toast.makeText(ContextHack.getContext(), "Not dead yet.", Toast.LENGTH_LONG).show();
+									return;
+								}
+
+								// send warning
+								JsonObjectRequest noTalkingRequest = new JsonObjectRequest(
+										Request.Method.POST,
+										"http://178.62.96.146/games/" + gameId + "/notalking",
+										"{\"player\":{\"id\":\"" + player.getPlayerId() + "\"}}",
+										new Response.Listener<JSONObject>() {
+											@Override
+											public void onResponse(JSONObject response) {
+
+											}
+										},
+										new Response.ErrorListener() {
+											@Override
+											public void onErrorResponse(VolleyError error) {
+
+											}
+										}
+								);
+								VolleySingleton.getInstance().getRequestQueue().add(noTalkingRequest);
+								break;
 							}
 							dialog.dismiss();
 						}

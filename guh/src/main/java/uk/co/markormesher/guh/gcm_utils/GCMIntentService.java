@@ -77,6 +77,12 @@ public class GCMIntentService extends IntentService {
 						i.putExtra("role", extras.getString("role"));
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
+
+					// ghosts can't talk
+					if (action.equals("notalking")) {
+						Intent i = new Intent(Keys.INTENT_NO_TALKING);
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
 				}
 			}
 		}

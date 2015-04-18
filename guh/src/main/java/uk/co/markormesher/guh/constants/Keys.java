@@ -14,5 +14,6 @@ public class Keys {
 	public final static String INTENT_DAYTIME = "uk.co.markormesher.guh.INTENT_DAYTIME";
 	public final static String INTENT_NIGHTTIME = "uk.co.markormesher.guh.INTENT_NIGHTTIME";
 	public final static String INTENT_BUZZ = "uk.co.markormesher.guh.INTENT_BUZZ";
+	public final static String INTENT_NO_TALKING = "uk.co.markormesher.guh.INTENT_NO_TALKING";
 
 }
