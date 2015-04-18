@@ -250,16 +250,15 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 
 		// pick a noise
 		double rand = Math.random();
-		int cow;
-		if (rand < 0.25) {
-			cow = R.raw.cow1;
-		} else if (rand < 0.5) {
-			cow = R.raw.cow2;
-		} else if (rand < 0.75) {
-			cow = R.raw.cow3;
-		} else {
-			cow = R.raw.cow4;
-		}
+		int cow = R.raw.cow9;
+		if (rand >= 0.92 && rand < 0.96) cow = R.raw.cow8;
+		if (rand >= 0.88 && rand < 0.92) cow = R.raw.cow7;
+		if (rand >= 0.84 && rand < 0.88) cow = R.raw.cow6;
+		if (rand >= 0.80 && rand < 0.84) cow = R.raw.cow5;
+		if (rand >= 0.60 && rand < 0.80) cow = R.raw.cow4;
+		if (rand >= 0.40 && rand < 0.60) cow = R.raw.cow3;
+		if (rand >= 0.20 && rand < 0.40) cow = R.raw.cow2;
+		if (rand >= 0.00 && rand < 0.00) cow = R.raw.cow1;
 
 		// play noise
 		MediaPlayer player = MediaPlayer.create(Play_Game.this, cow);
