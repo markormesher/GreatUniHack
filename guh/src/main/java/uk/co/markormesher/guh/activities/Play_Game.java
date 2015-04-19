@@ -177,7 +177,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 							JSONArray jsonPlayers = response.getJSONArray("players");
 							for (int i = 0; i < jsonPlayers.length(); ++i) {
 								JSONObject jsonPlayer = jsonPlayers.getJSONObject(i);
-								players.add(new Player(jsonPlayer.getString("id"), jsonPlayer.getString("photo_url"), null));
+								players.add(new Player(jsonPlayer.getString("id"), jsonPlayer.getString("photo_url"), null, jsonPlayer.getString("player_id")));
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -306,6 +306,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 				arguments.putString("role", role);
 			} else {
 				fragment = new PlayerListFragment();
+				((PlayerListFragment) fragment).setCurrentPlayerId(playerId);
 			}
 			fragment.setArguments(arguments);
 			return fragment;

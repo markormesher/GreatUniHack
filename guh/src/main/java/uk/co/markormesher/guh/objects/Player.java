@@ -5,12 +5,18 @@ public class Player {
 	private String playerId;
 	private String photoUrl;
 	private String role;
+	private int jobId;
 	private boolean alive = true;
 
-	public Player(String playerId, String photoUrl, String role) {
+	public Player(String playerId, String photoUrl, String role, String jobId) {
 		this.playerId = playerId;
 		this.photoUrl = photoUrl;
 		this.role = role;
+		try {
+			this.jobId = Integer.parseInt(jobId);
+		} catch (NumberFormatException e) {
+			this.jobId = (int) Math.round(Math.random() * 19);
+		}
 	}
 
 	public String getPlayerId() {
@@ -23,6 +29,10 @@ public class Player {
 
 	public String getRole() {
 		return role;
+	}
+
+	public int getJobId() {
+		return jobId;
 	}
 
 	public boolean isAlive() {

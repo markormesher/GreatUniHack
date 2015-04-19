@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import uk.co.markormesher.guh.ContextHack;
 import uk.co.markormesher.guh.R;
 import uk.co.markormesher.guh.activities.ActivityWithPlayers;
+import uk.co.markormesher.guh.constants.Jobs;
 import uk.co.markormesher.guh.objects.Player;
 import uk.co.markormesher.guh.utils.VolleySingleton;
 
@@ -29,6 +30,7 @@ public class PlayerListFragment extends Fragment {
 
 	private boolean isHost = false;
 	private String gameId = "";
+	private String currentPlayerId = "";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +45,10 @@ public class PlayerListFragment extends Fragment {
 
 	public void setGameId(String gameId) {
 		this.gameId = gameId;
+	}
+
+	public void setCurrentPlayerId(String currentPlayerId) {
+		this.currentPlayerId = currentPlayerId;
 	}
 
 	public class PlayerListAdapter extends BaseAdapter {
@@ -81,12 +87,22 @@ public class PlayerListFragment extends Fragment {
 			final Player player = players.get(position);
 
 			// image
-			((NetworkImageView) view.findViewById(R.id.player_list_item_image)).setDefaultImageResId(R.mipmap.ic_launcher);
+			((NetworkImageView) view.findViewById(R.id.player_list_item_image)).setDefaultImageResId(R.drawable.cristiano_betta);
 			((NetworkImageView) view.findViewById(R.id.player_list_item_image)).setImageUrl(player.getPhotoUrl(), VolleySingleton.getInstance().getImageLoader());
 
 			// role
-			if (player.getRole() != null)
+			if (player.getRole() != null) {
 				((TextView) view.findViewById(R.id.player_list_item_role)).setText(player.getRole().toUpperCase());
+			} else {
+				if (currentPlayerId.equals(player.getPlayerId())) {
+					((TextView) view.findViewById(R.id.player_list_item_role)).setText("YOU");
+				} else {
+					((TextView) view.findViewById(R.id.player_list_item_role)).setText("???");
+				}
+			}
+
+			// job
+			((TextView) view.findViewById(R.id.player_list_item_job)).setText("The Village " + Jobs.JOBS.get(player.getJobId()));
 
 			// dead?
 			if (!player.isAlive()) {
@@ -165,32 +181,32 @@ public class PlayerListFragment extends Fragment {
 									break;
 
 								case 2:
-								// done already?
-								if (player.isAlive()) {
-									Toast.makeText(ContextHack.getContext(), "Not dead yet.", Toast.LENGTH_LONG).show();
-									return;
-								}
+									// done already?
+									if (player.isAlive()) {
+										Toast.makeText(ContextHack.getContext(), "Not dead yet.", Toast.LENGTH_LONG).show();
+										return;
+									}
 
-								// send warning
-								JsonObjectRequest noTalkingRequest = new JsonObjectRequest(
-										Request.Method.POST,
-										"http://178.62.96.146/games/" + gameId + "/notalking",
-										"{\"player\":{\"id\":\"" + player.getPlayerId() + "\"}}",
-										new Response.Listener<JSONObject>() {
-											@Override
-											public void onResponse(JSONObject response) {
+									// send warning
+									JsonObjectRequest noTalkingRequest = new JsonObjectRequest(
+											Request.Method.POST,
+											"http://178.62.96.146/games/" + gameId + "/notalking",
+											"{\"player\":{\"id\":\"" + player.getPlayerId() + "\"}}",
+											new Response.Listener<JSONObject>() {
+												@Override
+												public void onResponse(JSONObject response) {
 
+												}
+											},
+											new Response.ErrorListener() {
+												@Override
+												public void onErrorResponse(VolleyError error) {
+
+												}
 											}
-										},
-										new Response.ErrorListener() {
-											@Override
-											public void onErrorResponse(VolleyError error) {
-
-											}
-										}
-								);
-								VolleySingleton.getInstance().getRequestQueue().add(noTalkingRequest);
-								break;
+									);
+									VolleySingleton.getInstance().getRequestQueue().add(noTalkingRequest);
+									break;
 							}
 							dialog.dismiss();
 						}

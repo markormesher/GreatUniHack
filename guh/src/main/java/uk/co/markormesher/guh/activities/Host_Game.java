@@ -64,7 +64,7 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 							JSONArray jsonPlayers = response.getJSONArray("players");
 							for (int i = 0; i < jsonPlayers.length(); ++i) {
 								JSONObject jsonPlayer = jsonPlayers.getJSONObject(i);
-								players.add(new Player(jsonPlayer.getString("id"), jsonPlayer.getString("photo_url"), jsonPlayer.getString("role")));
+								players.add(new Player(jsonPlayer.getString("id"), jsonPlayer.getString("photo_url"), jsonPlayer.getString("role"), jsonPlayer.getString("player_id")));
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();
