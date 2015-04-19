@@ -15,5 +15,6 @@ public class Keys {
 	public final static String INTENT_NIGHTTIME = "uk.co.markormesher.guh.INTENT_NIGHTTIME";
 	public final static String INTENT_BUZZ = "uk.co.markormesher.guh.INTENT_BUZZ";
 	public final static String INTENT_NO_TALKING = "uk.co.markormesher.guh.INTENT_NO_TALKING";
+	public final static String INTENT_GAME_OVER = "uk.co.markormesher.guh.INTENT_GAME_OVER";
 
 }

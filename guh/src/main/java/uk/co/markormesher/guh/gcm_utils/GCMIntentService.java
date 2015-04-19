@@ -84,6 +84,13 @@ public class GCMIntentService extends IntentService {
 						Intent i = new Intent(Keys.INTENT_NO_TALKING);
 						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
 					}
+
+					// game over
+					if (action.equals("gameover")) {
+						Intent i = new Intent(Keys.INTENT_GAME_OVER);
+						i.putExtra("winner", extras.getString("winner"));
+						LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+					}
 				}
 			}
 		}

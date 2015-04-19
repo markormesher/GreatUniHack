@@ -145,6 +145,26 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		}
 	};
 
+	BroadcastReceiver gameOver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String message;
+			if (intent.getExtras().getString("winner").equals("wolf")) {
+				message = "The wolves won! There are now as many wolves as villagers.";
+			} else {
+				message = "The villagers won by killing all of the wolves!";
+			}
+			new AlertDialog.Builder(Play_Game.this)
+					.setTitle("Game Over!")
+					.setMessage(message)
+					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					})
+					.show();
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -239,6 +259,9 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 
 		IntentFilter iff7 = new IntentFilter(Keys.INTENT_NO_TALKING);
 		LocalBroadcastManager.getInstance(this).registerReceiver(noTalking, iff7);
+
+		IntentFilter iff8 = new IntentFilter(Keys.INTENT_GAME_OVER);
+		LocalBroadcastManager.getInstance(this).registerReceiver(gameOver, iff8);
 	}
 
 	@Override
@@ -251,6 +274,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(meta);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(buzz);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(noTalking);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(gameOver);
 	}
 
 	private void checkAllLoaded() {

@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import uk.co.markormesher.guh.ContextHack;
 import uk.co.markormesher.guh.R;
 import uk.co.markormesher.guh.activities.ActivityWithPlayers;
+import uk.co.markormesher.guh.activities.PlayerListenerActivity;
 import uk.co.markormesher.guh.constants.Jobs;
 import uk.co.markormesher.guh.objects.Player;
 import uk.co.markormesher.guh.utils.VolleySingleton;
@@ -134,6 +135,7 @@ public class PlayerListFragment extends Fragment {
 
 									// update to dead
 									player.setAlive(false);
+									((PlayerListenerActivity) getActivity()).onPlayerDeath();
 									view.findViewById(R.id.player_list_item_image).setAlpha(0.3f);
 									view.findViewById(R.id.player_list_item_x_image).setVisibility(View.VISIBLE);
 									view.findViewById(R.id.player_list_item_x_image).setAlpha(0.5f);

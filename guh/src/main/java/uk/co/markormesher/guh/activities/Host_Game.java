@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ import uk.co.markormesher.guh.utils.VolleySingleton;
 
 import java.util.ArrayList;
 
-public class Host_Game extends ActionBarActivity implements ActivityWithPlayers {
+public class Host_Game extends ActionBarActivity implements ActivityWithPlayers, PlayerListenerActivity {
 
 	private String gameId;
 	private ArrayList<Player> players = new ArrayList<>();
@@ -101,6 +102,56 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 				})
 				.setNegativeButton("No", null)
 				.show();
+	}
+
+	@Override
+	public void onPlayerDeath() {
+		// check the number of living wolves/villages
+		int livingWolves = 0;
+		int livingVillagers = 0;
+		for (Player p : players) {
+			if (!p.isAlive()) continue;
+			if (p.getRole().equals("wolf")) {
+				++livingWolves;
+			} else {
+				++livingVillagers;
+			}
+		}
+
+		// log
+		Log.d("MLHORRORS", livingVillagers + " villagers vs. " + livingWolves + " wolves");
+
+		// check the state of things
+		String winner = null;
+		if (livingWolves == 0) {
+			// villagers won
+			winner = "villager";
+		} else if (livingVillagers == livingWolves) {
+			// wolves won
+			winner = "wolf";
+		}
+
+		// post to server?
+		if (winner != null) {
+			Log.d("MLHORRORS", "Sending winner: " + winner);
+			JsonObjectRequest finishRequest = new JsonObjectRequest(
+					Request.Method.POST,
+					"http://178.62.96.146/games/" + gameId + "/finish",
+					"{\"winner\":\"" + winner + "\"}",
+					new Response.Listener<JSONObject>() {
+						@Override
+						public void onResponse(JSONObject response) {
+						}
+					},
+					new Response.ErrorListener() {
+						@Override
+						public void onErrorResponse(VolleyError error) {
+						}
+					}
+			);
+			finishRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
+			VolleySingleton.getInstance().getRequestQueue().add(finishRequest);
+		}
 	}
 
 	public class HostPagerAdapter extends FragmentPagerAdapter {
