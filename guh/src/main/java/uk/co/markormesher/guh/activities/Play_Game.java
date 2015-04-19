@@ -196,6 +196,7 @@ public class Play_Game extends ActionBarActivity implements ActivityWithPlayers 
 					}
 				}
 		);
+		gameRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 		VolleySingleton.getInstance().getRequestQueue().add(gameRequest);
 	}
 

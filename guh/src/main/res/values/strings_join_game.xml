@@ -2,6 +2,7 @@
 <resources>
 	<string name="activity_title_join_game">Playing: Join a Game</string>
 	<string name="game_id_placeholder">Game ID</string>
-	<string name="join_button">Join!</string>
+	<string name="join_button">Join</string>
+	<string name="join_with_will_button">Join + Will</string>
 	<string name="join_game_done">Done! Waiting for the game to start…</string>
 </resources>

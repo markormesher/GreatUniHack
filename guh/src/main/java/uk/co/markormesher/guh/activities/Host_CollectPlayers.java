@@ -98,6 +98,7 @@ public class Host_CollectPlayers extends ActionBarActivity {
 				}};
 			}
 		};
+		gameIdRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 		VolleySingleton.getInstance().getRequestQueue().add(gameIdRequest);
 
 		// click listener on button
@@ -131,6 +132,7 @@ public class Host_CollectPlayers extends ActionBarActivity {
 							}
 						}
 				);
+				startRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 				VolleySingleton.getInstance().getRequestQueue().add(startRequest);
 			}
 		});

@@ -83,6 +83,7 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 					}
 				}
 		);
+		gameRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 		VolleySingleton.getInstance().getRequestQueue().add(gameRequest);
 	}
 
@@ -206,6 +207,7 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 					}
 				}
 		);
+		request.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 		VolleySingleton.getInstance().getRequestQueue().add(request);
 	}
 
@@ -226,6 +228,7 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 					}
 				}
 		);
+		request.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 		VolleySingleton.getInstance().getRequestQueue().add(request);
 	}
 
@@ -246,6 +249,7 @@ public class Host_Game extends ActionBarActivity implements ActivityWithPlayers 
 					}
 				}
 		);
+		request.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 		VolleySingleton.getInstance().getRequestQueue().add(request);
 	}
 

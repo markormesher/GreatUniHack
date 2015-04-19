@@ -156,6 +156,7 @@ public class PlayerListFragment extends Fragment {
 												}
 											}
 									);
+									killRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 									VolleySingleton.getInstance().getRequestQueue().add(killRequest);
 									break;
 
@@ -177,6 +178,7 @@ public class PlayerListFragment extends Fragment {
 												}
 											}
 									);
+									metaRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 									VolleySingleton.getInstance().getRequestQueue().add(metaRequest);
 									break;
 
@@ -205,6 +207,7 @@ public class PlayerListFragment extends Fragment {
 												}
 											}
 									);
+									noTalkingRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 									VolleySingleton.getInstance().getRequestQueue().add(noTalkingRequest);
 									break;
 							}

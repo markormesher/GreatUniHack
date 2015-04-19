@@ -16,13 +16,6 @@
 			android:gravity="center"
 			android:layout_centerInParent="true">
 
-		<ImageView
-				android:id="@+id/join_game_selfie"
-				android:layout_width="80dp"
-				android:layout_height="80dp"
-				android:scaleType="centerCrop"
-				android:layout_marginBottom="@dimen/margin_medium"/>
-
 		<EditText
 				android:id="@+id/game_id_input"
 				android:layout_width="fill_parent"
@@ -34,11 +27,26 @@
 			<requestFocus/>
 		</EditText>
 
-		<Button
-				android:id="@+id/join_game_button"
+		<LinearLayout
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/join_button"/>
+				android:orientation="horizontal">
+
+			<Button
+					android:id="@+id/join_game_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/join_button"
+					android:layout_marginRight="@dimen/margin_small"/>
+
+			<Button
+					android:id="@+id/join_game_with_will_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/join_with_will_button"/>
+
+		</LinearLayout>
+
 
 		<ProgressBar
 				android:id="@+id/join_game_loader"

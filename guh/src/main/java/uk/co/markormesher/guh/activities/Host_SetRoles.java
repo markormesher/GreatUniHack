@@ -137,6 +137,7 @@ public class Host_SetRoles extends ActionBarActivity {
 							}
 						}
 				);
+				rolesRequest.setRetryPolicy(VolleySingleton.RETRY_POLICY);
 				VolleySingleton.getInstance().getRequestQueue().add(rolesRequest);
 			}
 		});

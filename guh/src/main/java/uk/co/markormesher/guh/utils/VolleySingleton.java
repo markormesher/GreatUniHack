@@ -2,7 +2,9 @@ package uk.co.markormesher.guh.utils;
 
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import uk.co.markormesher.guh.ContextHack;
@@ -11,6 +13,7 @@ public class VolleySingleton {
 	private static VolleySingleton mInstance = null;
 	private RequestQueue mRequestQueue;
 	private ImageLoader mImageLoader;
+
 	private VolleySingleton() {
 		mRequestQueue = Volley.newRequestQueue(ContextHack.getContext());
 		mImageLoader = new ImageLoader(this.mRequestQueue, new ImageLoader.ImageCache() {
@@ -40,5 +43,10 @@ public class VolleySingleton {
 	public ImageLoader getImageLoader() {
 		return this.mImageLoader;
 	}
+
+	public static final RetryPolicy RETRY_POLICY = new DefaultRetryPolicy(
+			0,
+			DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+			DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
 }
